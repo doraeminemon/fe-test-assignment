@@ -1,0 +1,12 @@
+
+Todo:
+  ☐ Home page: display overall weather from cities of a country (US or VN) -> List view
+  ☐ Details page: when user click on a weather, display a new page with detailed weather information from that country
+  ☐ Use a State Container (such as Redux) if you use ReactJS/VueJS
+  ☐ you can use any design system: Bootstrap (Twitter), Materialize(Google), Carbon(IBM) or Ant-Design(Alibaba) ...
+  ☐ Focus on component structure design (clean the logic, not duplicate the code)
+  ☐ Focus on loading performance (how the HTML DOM are rendered, does it have unnecessary re-render?)
+Advanced features:
+  ☐ UnitTest
+  ☐ Implement a server-side rendering for that SPA (use NodeJS based server or any: Java, Go...)
+  ☐ That server will pre-render the HTML dom, JS and CSS chunking... (such like how NextJS does)
