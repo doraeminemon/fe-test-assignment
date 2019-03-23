@@ -1,4 +1,6 @@
-# assignment.fe.weventure
+# Open weather browser
+
+
 
 ## Project setup
 ```

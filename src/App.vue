@@ -8,9 +8,12 @@
       ||
       router-link(to='/')  Home
     router-view
+    .d-flex.justify-content-center.m-3
+      i.wi.wi-day-sunny
 </template>
 
 <style lang="scss">
+@import './styles/weather-icons.min.css';
 #app {
   text-align: center;
 }

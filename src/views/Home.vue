@@ -1,23 +1,24 @@
 <template lang='pug'>
   .home
-    h2.title Open weather browser
-    .container.mt-3
-      .row.justify-content-md-center
-        .col-md-4
-          ul.list-group
-            a.list-group-item.list-group-item-action(
-              v-for='city in cities'
-              @click='selectCity(city)'
-              :key='city.id'
-              :class = '{ active : selectedCity === city }'
-              href='#'
-            ) {{ city.name }}
-        .col-md-8
-          template(v-if='selectedCity')
-            .d-flex.justify-content-center(v-if='isLoading')
-              .spinner-border(role='status')
-                span.sr-only Loading...
-            p {{ focusedCityData }}
+    h2.title
+      i.wi.wi-day-sunny.mr-2
+      | Open weather browser
+    .container.justify-content-md-center.mt-3
+      ul.list-group
+        a.list-group-item.list-group-item-action(
+          v-for='city in cities'
+          @click='selectCity(city)'
+          :key='city.id'
+          :class = '{ active : selectedCity === city }'
+          href='#'
+        )
+          .row.text-left
+            .col-5
+              b {{ city.name }}
+            .col {{ get(city, 'weather[0].description') || 'Not yet loaded' }}
+            .col.text-right
+              | {{ readableTemp(get(city, 'main.temp_min')) }} -
+              | {{ readableTemp(get(city, 'main.temp_max')) }} °C
 </template>
 
 <script>
@@ -25,6 +26,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable no-return-assign */
 import _ from 'lodash';
+import cities from '@/store/cities.module';
 
 export default {
   name: 'home',
@@ -32,6 +34,10 @@ export default {
   },
   created() {
     this.debouncedRequestWeather = _.debounce(this.requestWeather, 400);
+    this.get = _.get;
+  },
+  mounted() {
+    this.requestWeathers();
   },
   watch: {
     selectedCity() {
@@ -39,6 +45,14 @@ export default {
     },
   },
   methods: {
+    readableTemp(str_temp) {
+      const number = Number(str_temp);
+      if (typeof number !== 'number' || isNaN(number)) return str_temp;
+      return Math.round( number * 10 ) / 10;
+    },
+    getIconFromCode(code) {
+      return `http://openweathermap.org/img/w/${code}.png`;
+    },
     selectCity(city) {
       this.selectedCity = city;
     },
@@ -49,24 +63,29 @@ export default {
       const url = `weather?q=${name}`;
       this.$http.get(url)
         .then(resp => this.focusedCityData = resp.data)
-        .catch(err => console.error(err))
+        .finally(() => this.isLoading = false);
+    },
+    requestWeathers() {
+      if (!this.cities) return;
+      this.isLoading = true;
+      const citiesIds = cities.map(item => item.id).join(',');
+      const url = `group?id=${citiesIds}`;
+      this.$http.get(url)
+        .then((resp) => {
+          const mergeCities = _.values(
+            _.merge(
+              _.keyBy(resp.data.list, 'id'),
+              _.keyBy(this.cities, 'id')
+            )
+          );
+          this.cities = mergeCities;
+        })
         .finally(() => this.isLoading = false);
     }
   },
   data() {
     return {
-      cities: [
-        { id: 1, name: 'Bangkok' },
-        { id: 2, name: 'Bali' },
-        { id: 3, name: 'Osaka' },
-        { id: 4, name: 'Barcelona' },
-        { id: 5, name: 'Hong Kong' },
-        { id: 6, name: 'Milan' },
-        { id: 7, name: 'Palma de Mallorca' },
-        { id: 8, name: 'Pattaya' },
-        { id: 9, name: 'Makkah' },
-        { id: 10, name: 'Phuket' }
-      ],
+      cities,
       selectedCity: null,
       isLoading: false,
       focusedCityData: null,
