@@ -1,24 +1,29 @@
 <template lang='pug'>
   .home
-    h2.title
+    h2.title.text-center
       i.wi.wi-day-sunny.mr-2
       | Open weather browser
     .container.justify-content-md-center.mt-3
-      ul.list-group
-        a.list-group-item.list-group-item-action(
-          v-for='city in cities'
-          @click='selectCity(city)'
-          :key='city.id'
-          :class = '{ active : selectedCity === city }'
-          href='#'
-        )
-          .row.text-left
-            .col-5
-              b {{ city.name }}
-            .col {{ get(city, 'weather[0].description') || 'Not yet loaded' }}
-            .col.text-right
-              | {{ readableTemp(get(city, 'main.temp_min')) }} -
-              | {{ readableTemp(get(city, 'main.temp_max')) }} °C
+      NetworkableComponent(
+        :url='requestWeathersUrl()'
+        :callback='requestWeathersCallback'
+      )
+        template(v-slot:component)
+          ul.list-group
+            a.list-group-item.list-group-item-action(
+              v-for='city in cities'
+              @click='selectCity(city)'
+              :key='city.id'
+              :class = '{ active : selectedCity === city }'
+              href='#'
+            )
+              .row.text-left
+                .col-5
+                  b {{ city.name }}
+                .col {{ get(city, 'weather[0].description') || 'Not yet loaded' }}
+                .col.text-right
+                  | {{ readableTemp(get(city, 'main.temp_min')) }} -
+                  | {{ readableTemp(get(city, 'main.temp_max')) }} °C
 </template>
 
 <script>
@@ -27,16 +32,15 @@
 /* eslint-disable no-return-assign */
 import _ from 'lodash';
 import cities from '@/store/cities.module';
+import NetworkableComponent from '@/components/NetworkableComponent.vue';
 
 export default {
   name: 'home',
   components: {
+    NetworkableComponent,
   },
   created() {
     this.get = _.get;
-  },
-  mounted() {
-    this.requestWeathers();
   },
   methods: {
     readableTemp(strTemp) {
@@ -47,23 +51,20 @@ export default {
     selectCity(city) {
       this.$router.push({ path: `/details/${city.id}` });
     },
-    requestWeathers() {
-      if (!this.cities) return;
-      this.isLoading = true;
+    requestWeathersUrl() {
+      if (!this.cities) throw new Error('Missing cities');
       const citiesIds = cities.map(item => item.id).join(',');
-      const url = `group?id=${citiesIds}`;
-      this.$http.get(url)
-        .then((resp) => {
-          const mergeCities = _.values(
-            _.merge(
-              _.keyBy(resp.data.list, 'id'),
-              _.keyBy(this.cities, 'id')
-            )
-          );
-          this.cities = mergeCities;
-        })
-        .finally(() => this.isLoading = false);
-    }
+      return `group?id=${citiesIds}`;
+    },
+    requestWeathersCallback(resp) {
+      const mergeCities = _.values(
+        _.merge(
+          _.keyBy(resp.data.list, 'id'),
+          _.keyBy(this.cities, 'id')
+        )
+      );
+      this.cities = mergeCities;
+    },
   },
   data() {
     return {

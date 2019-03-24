@@ -7,17 +7,20 @@
       router-link(to='/Cities') Cities
       ||
       router-link(to='/')  Home
-    router-view
+    div(v-if='!error')
+      router-view
+    div(v-else)
+      .container.text-left
+        .alert.alert-danger(role='alert')
+          | Something went wrong <br/>
+          | {{ error }}
     .d-flex.justify-content-center.m-3
       i.wi.wi-day-sunny
 </template>
-
 <style lang="scss">
 @import './styles/weather-icons.min.css';
-#app {
-  text-align: center;
-}
 #nav {
+  text-align: center;
   padding: 30px;
   a {
     font-weight: bold;
@@ -29,3 +32,15 @@
   }
 }
 </style>
+<script>
+export default {
+  errorCaptured(err) {
+    this.error = err;
+  },
+  data() {
+    return {
+      error: null,
+    };
+  },
+};
+</script>
