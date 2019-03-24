@@ -13,7 +13,8 @@
       .container.text-left
         .alert.alert-danger(role='alert')
           | Something went wrong <br/>
-          | {{ error }}
+          | {{ error }} <br/>
+          a.btn.btn-secondary.mt-1(href='#' @click='clearError()') Back to home
     .d-flex.justify-content-center.m-3
       i.wi.wi-day-sunny
 </template>
@@ -34,6 +35,12 @@
 </style>
 <script>
 export default {
+  methods: {
+    clearError() {
+      this.$router.replace('/');
+      this.error = null;
+    },
+  },
   errorCaptured(err) {
     this.error = err;
   },

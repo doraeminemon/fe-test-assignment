@@ -1,6 +1,6 @@
 export default [
   { id: 1609350, name: 'Bangkok' },
-  { id: 1784642, name: 'Bali' },
+  { id: 2038493, name: 'Bali' },
   { id: 1853909, name: 'Osaka' },
   { id: 3128760, name: 'Barcelona' },
   { id: 1819729, name: 'Hong Kong' },
