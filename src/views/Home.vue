@@ -33,37 +33,19 @@ export default {
   components: {
   },
   created() {
-    this.debouncedRequestWeather = _.debounce(this.requestWeather, 400);
     this.get = _.get;
   },
   mounted() {
     this.requestWeathers();
   },
-  watch: {
-    selectedCity() {
-      this.debouncedRequestWeather();
-    },
-  },
   methods: {
-    readableTemp(str_temp) {
-      const number = Number(str_temp);
-      if (typeof number !== 'number' || isNaN(number)) return str_temp;
-      return Math.round( number * 10 ) / 10;
-    },
-    getIconFromCode(code) {
-      return `http://openweathermap.org/img/w/${code}.png`;
+    readableTemp(strTemp) {
+      const number = Number(strTemp);
+      if (typeof number !== 'number' || Number.isNaN(number)) return strTemp;
+      return Math.round(number * 10) / 10;
     },
     selectCity(city) {
-      this.selectedCity = city;
-    },
-    requestWeather() {
-      this.isLoading = true;
-      this.focusedCityData = '';
-      const { name } = this.selectedCity;
-      const url = `weather?q=${name}`;
-      this.$http.get(url)
-        .then(resp => this.focusedCityData = resp.data)
-        .finally(() => this.isLoading = false);
+      this.$router.push({ path: `/details/${city.id}` });
     },
     requestWeathers() {
       if (!this.cities) return;

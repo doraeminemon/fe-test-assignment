@@ -1,10 +1,10 @@
 
 Todo:
-  ☐ Home page: display overall weather from cities of a country (US or VN) -> List view
-  ☐ Details page: when user click on a weather, display a new page with detailed weather information from that country
-  ☐ Use a State Container (such as Redux) if you use ReactJS/VueJS
-  ☐ you can use any design system: Bootstrap (Twitter), Materialize(Google), Carbon(IBM) or Ant-Design(Alibaba) ...
-  ☐ Focus on component structure design (clean the logic, not duplicate the code)
+  ✔ Home page: display overall weather from cities of a country (US or VN) -> List view @done(19-03-24 15:33)
+  ✔ Details page: when user click on a weather, display a new page with detailed weather information from that country @done(19-03-24 15:34)
+  ✔ Use a State Container (such as Redux) if you use ReactJS/VueJS @done(19-03-24 15:34)
+  ✔ you can use any design system: Bootstrap (Twitter), Materialize(Google), Carbon(IBM) or Ant-Design(Alibaba) ... @done(19-03-24 15:34)
+  ✔ Focus on component structure design (clean the logic, not duplicate the code) @done(19-03-24 15:34)
   ☐ Focus on loading performance (how the HTML DOM are rendered, does it have unnecessary re-render?)
 Advanced features:
   ☐ UnitTest
