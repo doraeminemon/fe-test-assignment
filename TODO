@@ -5,8 +5,8 @@ Todo:
   ✔ Use a State Container (such as Redux) if you use ReactJS/VueJS @done(19-03-24 15:34)
   ✔ you can use any design system: Bootstrap (Twitter), Materialize(Google), Carbon(IBM) or Ant-Design(Alibaba) ... @done(19-03-24 15:34)
   ✔ Focus on component structure design (clean the logic, not duplicate the code) @done(19-03-24 15:34)
-  ☐ Focus on loading performance (how the HTML DOM are rendered, does it have unnecessary re-render?)
+  ☐ Focus on loading performance - using CriticalCSS
 Advanced features:
-  ☐ UnitTest
+  ✔ UnitTest @done(19-03-25 23:24)
   ☐ Implement a server-side rendering for that SPA (use NodeJS based server or any: Java, Go...)
   ☐ That server will pre-render the HTML dom, JS and CSS chunking... (such like how NextJS does)
