@@ -19,10 +19,8 @@ describe("CityList", () => {
   it("should display the correct error messages based on object from props", () => {
     const wrapper = createWrapper({ id });
 
-    const errorMessages = wrapper.findAll('p');
-    expect(errorMessages.length).toEqual(3);
-    // expect(errorMessages.at(0).text()).toContain(errors.title);
-    // expect(errorMessages.at(1).text()).toContain(errors.body);
-    // expect(errorMessages.at(2).text()).toContain(errors.description);
+    const div = wrapper.findAll('div');
+    expect(div.length).toEqual(1);
+    expect(div.at(0).text()).toContain('CityList');
   });
 });

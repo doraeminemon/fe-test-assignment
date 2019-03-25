@@ -14,7 +14,6 @@
               v-for='city in cities'
               @click='selectCity(city)'
               :key='city.id'
-              :class = '{ active : selectedCity === city }'
               href='#'
             )
               .row.text-left
@@ -31,7 +30,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable no-return-assign */
 import _ from 'lodash';
-import cities from '@/store/cities.module';
+import { mapState } from 'vuex';
 import NetworkableComponent from '@/components/NetworkableComponent.vue';
 
 export default {
@@ -41,6 +40,9 @@ export default {
   },
   created() {
     this.get = _.get;
+  },
+  computed: {
+    ...mapState('Cities', ['cities']),
   },
   methods: {
     readableTemp(strTemp) {
@@ -53,7 +55,7 @@ export default {
     },
     requestWeathersUrl() {
       if (!this.cities) throw new Error('Missing cities');
-      const citiesIds = cities.map(item => item.id).join(',');
+      const citiesIds = this.cities.map(item => item.id).join(',');
       return `group?id=${citiesIds}`;
     },
     requestWeathersCallback(resp) {
@@ -63,16 +65,11 @@ export default {
           _.keyBy(this.cities, 'id')
         )
       );
-      this.cities = mergeCities;
+      this.$store.dispatch('Cities/setCities', { cities: mergeCities });
     },
   },
   data() {
-    return {
-      cities,
-      selectedCity: null,
-      isLoading: false,
-      focusedCityData: null,
-    };
-  }
+    return {};
+  },
 };
 </script>
